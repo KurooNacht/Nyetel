@@ -13,6 +13,7 @@
 		071C87F92BE0C2B800EC63E7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 071C87F82BE0C2B800EC63E7 /* Base */; };
 		071C87FB2BE0C2BA00EC63E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 071C87FA2BE0C2BA00EC63E7 /* Assets.xcassets */; };
 		071C87FE2BE0C2BB00EC63E7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 071C87FD2BE0C2BB00EC63E7 /* Base */; };
+		072D49622BE311B200F94356 /* Vinyl Anak Sekolah Chorus.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 072D49612BE311B200F94356 /* Vinyl Anak Sekolah Chorus.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		071C87F82BE0C2B800EC63E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		071C87FA2BE0C2BA00EC63E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		071C87FD2BE0C2BB00EC63E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		072D49612BE311B200F94356 /* Vinyl Anak Sekolah Chorus.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Vinyl Anak Sekolah Chorus.mp3"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				071C87F12BE0C2B800EC63E7 /* AppDelegate.swift */,
+				072D49602BE3116B00F94356 /* sounds */,
 				071C87F32BE0C2B800EC63E7 /* art.scnassets */,
 				071C87F52BE0C2B800EC63E7 /* GameViewController.swift */,
 				071C87F72BE0C2B800EC63E7 /* Main.storyboard */,
@@ -63,6 +66,14 @@
 				071C87FC2BE0C2BB00EC63E7 /* LaunchScreen.storyboard */,
 			);
 			path = testing1234;
+			sourceTree = "<group>";
+		};
+		072D49602BE3116B00F94356 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				072D49612BE311B200F94356 /* Vinyl Anak Sekolah Chorus.mp3 */,
+			);
+			path = sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +137,7 @@
 				071C87F42BE0C2B800EC63E7 /* art.scnassets in Resources */,
 				071C87FB2BE0C2BA00EC63E7 /* Assets.xcassets in Resources */,
 				071C87F92BE0C2B800EC63E7 /* Base in Resources */,
+				072D49622BE311B200F94356 /* Vinyl Anak Sekolah Chorus.mp3 in Resources */,
 				071C87FE2BE0C2BB00EC63E7 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
