@@ -16,11 +16,16 @@ class GameViewController: UIViewController {
     var needle : SCNNode!
     var tombolPink: SCNNode!
     var needleButton : SCNNode!
+    var roomTurnTable : SCNNode!
     var vinyl : SCNNode!
-    var audioNode: SCNNode?
+    var vinylCam: SCNNode!
+    var roomCam: SCNNode! // Declare roomCamNode as an instance variable
+    var cameraNode: SCNNode!
     var isCubePressed = false
     var isNeedleRotate = false
     var isPinkPressed = false
+    var sounds:[String:SCNAudioSource] = [:]
+    var scnView: SCNView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,30 +34,42 @@ class GameViewController: UIViewController {
         let scene = SCNScene(named: "art.scnassets/test.scn")!
         
         // create and add a camera to the scene
-        let cameraNode = SCNNode()
+//        let cameraNode = SCNNode()
+//        cameraNode.camera = SCNCamera()
+//        scene.rootNode.addChildNode(cameraNode)
+        
+        
+        cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
+
+        let roomCam = scene.rootNode.childNode(withName: "roomCam", recursively: true)!
+        cameraNode.camera = roomCam.camera
+        
+        let vinylCam = scene.rootNode.childNode(withName: "vinylCam", recursively: true)!
+        cameraNode.camera = vinylCam.camera
+        
+        scnView = self.view as! SCNView
+        scnView.pointOfView = roomCam
         
         // retrieve the ship node
+        roomTurnTable = scene.rootNode.childNode(withName: "Cube_009", recursively: true)
         vinyl = scene.rootNode.childNode(withName: "Circle", recursively: true)!
         needle = scene.rootNode.childNode(withName: "needle", recursively: true)!
         needleButton = scene.rootNode.childNode(withName: "Cube_007", recursively: true)!
         tutupanBening = scene.rootNode.childNode(withName: "tutupan", recursively: true)!
-        tutupan = scene.rootNode.childNode(withName: "Cube_009", recursively: true)!
+        tutupan = scene.rootNode.childNode(withName: "cover", recursively: true)!
         tombolPink = scene.rootNode.childNode(withName: "Cylinder", recursively: true)!
         
+        
         // Create a sound source
-              let audioSource = SCNAudioSource(fileNamed: "YourSoundFileName.mp3")!
-              audioSource.load()
-              
-              // Attach the audio source to a node in your scene
-              audioNode = SCNNode()
-              let audioPlayer = SCNAudioPlayer(source: audioSource)
-              audioNode?.addAudioPlayer(audioPlayer)
-        
+              let music = SCNAudioSource(fileNamed: "art.scnassets/music.wav")!
+              music.load()
+            sounds["music"] = music
+                      
         // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
+//        let scnView = self.view as! SCNView
+//        
         // set the scene to the view
         scnView.scene = scene
         
@@ -71,6 +88,12 @@ class GameViewController: UIViewController {
 
     }
     
+//    @objc func handleVinylTap(_ gestureRecognize: UITapGestureRecognizer) {
+//           // Switch camera POV from roomCamNode to cameraNode when vinyl is tapped
+//           let scnView = self.view as! SCNView
+//           scnView.pointOfView = cameraNode
+//       }
+    
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
             // Handle the beginning of the long press here
@@ -78,6 +101,7 @@ class GameViewController: UIViewController {
             // Handle the end of the long press here
         }
     }
+    
     
     @objc
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
@@ -90,7 +114,7 @@ class GameViewController: UIViewController {
         // check that we clicked on at least one object
         let isCoverButtonPressed = hitResults.contains { result in
             print("isCoverButtonPressed \(result.node.name)")
-            return result.node.name == "Cube_009"
+            return result.node.name == "cover"
         }
         let isNeedleButtonPressed = hitResults.contains {
               result in print("isNeedleButtonPressed\(result.node.name)")
@@ -99,8 +123,17 @@ class GameViewController: UIViewController {
         let isPinkButtonPressed = hitResults.contains {
             result in print("isPinkButtonPressed\(result.node.name)")
             return result.node.name == "Cylinder"
+
+        }
+        let isRoomTurnTablePressed = hitResults.contains {
+            result in print("isRoomTurnTablePressed\(result.node.name)")
+            return result.node.name == "Cube_009"
         }
         
+        if isRoomTurnTablePressed {
+            scnView.pointOfView = vinylCam
+        }
+       
         
         if isPinkButtonPressed {
              if isPinkPressed {
@@ -109,14 +142,26 @@ class GameViewController: UIViewController {
                             tombolPink.runAction(moveAction)
                             // Stop the vinyl rotation
                             vinyl.removeAllActions()
+                 let music = sounds["music"]
+                 if let music = music {
+                     vinyl.removeAllAudioPlayers()
+                 }
+
                         } else {
                             // Move the pink button down
-                            let moveAction = SCNAction.move(to: SCNVector3(0, 0, -1), duration: 0.2)
+                            let moveAction = SCNAction.move(to: SCNVector3(0, 0, -0.6), duration: 0.2)
                             tombolPink.runAction(moveAction)
                  // Rotate the vinyl
                  let rotateAction = SCNAction.rotate(by: .pi / 2, around: SCNVector3(0, 0, 1), duration: 0.5)
                  let repeatForeverAction = SCNAction.repeatForever(rotateAction)
                  vinyl.runAction(repeatForeverAction)
+                        if isNeedleRotate == true   
+                            {  let music = sounds["music"]
+                                if let music = music {
+                                    let musicPlayer = SCNAudioPlayer(source: music)
+                                    vinyl.addAudioPlayer(musicPlayer)}
+                            }
+                            
              }
              // Toggle the pink button state
              isPinkPressed.toggle()
@@ -126,6 +171,10 @@ class GameViewController: UIViewController {
             if  isNeedleRotate{
                 
                 triggerAnimatonNeedle(clockwise: false)
+                let music = sounds["music"]
+                if let music = music {
+                    vinyl.removeAllAudioPlayers()
+                }
             }else{
                 triggerAnimatonNeedle(clockwise: true)
             }
@@ -146,7 +195,7 @@ class GameViewController: UIViewController {
           }
       }
     
-    
+
         
     func triggerVinylAnimation() {
         
